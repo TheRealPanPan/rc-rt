@@ -1,4 +1,6 @@
 import json
+import argparse
+import os
 
 
 tile_type = {
@@ -121,17 +123,17 @@ def add_to_collection(tiles, tile):
 
     if tile["coord"]["x"] == 1:  # First Row cannot go left.
         if is_left_authorized(tile):  # Not pair, mean Left is authorized
-            print("you can't go left on first row ...")
+            print("You can't go left on first row ...")
             return True
 
     if tile["coord"]["x"] == 8:  # Last col should go right
         if not is_right_authorized(tile):
-            print("you should go right on last col ...")
+            print("You should go right on last col ...")
             return True
 
     if tile["coord"]["y"] == 8:  # Last row should go down except on WHIRLPOOL
         if not is_down_authorized(tile) and tile["type"] != tile_type["W"]:
-            print("you should go down on last row ...")
+            print("You should go down on last row ...")
             return True
 
     if tile["coord"]["x"] == 1 and tile['coord']['y'] == 1:
@@ -151,14 +153,18 @@ def add_to_collection(tiles, tile):
         if is_right_authorized(
             tiles[tile["coord"]["y"]][tile["coord"]["x"]-1]
         ) != is_left_authorized(tile):
-            print("Right tile is not compatible with this one")
+            print("Left tile is not compatible with this one")
             return True
 
     tiles[tile["coord"]["y"]][tile["coord"]["x"]] = tile
     return False  # All is ok
 
 
-if __name__ == "__main__":
+def main(args):
+    if os.path.exists(args.output):
+        print("File already exists")
+        return
+
     tiles = {}
     for y in range(1, 9):
         tiles[y] = {}
@@ -168,5 +174,17 @@ if __name__ == "__main__":
                 tile = ask_info_for_tile(x, y)
                 b = add_to_collection(tiles, tile)
 
-    with open("plates_01.json", "wb") as f:
+    with open(args.output, "wb") as f:
         f.write(json.dumps(tiles).encode("UTF-8"))
+
+
+if __name__ == "__main__":
+    p = argparse.ArgumentParser(
+        description="Will ask you info about the tiles of the plate"
+    )
+
+    p.add_argument("--output", type=str, help="Self Explainatory",
+        required=True
+    )
+    args = p.parse_args()
+    main(args)
