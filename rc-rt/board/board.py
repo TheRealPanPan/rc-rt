@@ -47,7 +47,6 @@ class Board:
     def is_down_authorized(self, x, y):
         return True
 
-
     #  TODO
     def where_do_i_stop(self, startx, starty, direction):
         return {

@@ -4,29 +4,29 @@ import os
 
 
 tile_type = {
-"E": "EMPTY",
-"W": "WHIRLPOOL",
-"C": "CENTER",
-"O": "OBJECTIVE"
+    "E": "EMPTY",
+    "W": "WHIRLPOOL",
+    "C": "CENTER",
+    "O": "OBJECTIVE"
 }
 
 objective_type = [
-"BLUE_MOON",
-"YELLOW_WHEEL",
-"GREEN_SATURN",
-"RED_STAR",
-"YELLOW_MOON",
-"GREEN_WHEEL",
-"RED_SATURN",
-"BLUE_STAR",
-"GREEN_MOON",
-"RED_WHEEL",
-"BLUE_SATURN",
-"YELLOW_STAR",
-"RED_MOON",
-"BLUE_WHEEL",
-"YELLOW_SATURN",
-"GREEN_STAR",
+    "BLUE_MOON",
+    "YELLOW_WHEEL",
+    "GREEN_SATURN",
+    "RED_STAR",
+    "YELLOW_MOON",
+    "GREEN_WHEEL",
+    "RED_SATURN",
+    "BLUE_STAR",
+    "GREEN_MOON",
+    "RED_WHEEL",
+    "BLUE_SATURN",
+    "YELLOW_STAR",
+    "RED_MOON",
+    "BLUE_WHEEL",
+    "YELLOW_SATURN",
+    "GREEN_STAR",
 ]
 
 
@@ -52,7 +52,7 @@ def ask_info_for_tile(x, y):
     while t_type not in tile_type:
         t_type = input(
             "Type of Tile at (Col,Line) (%s,%s)"
-            "(C, W, E, O) [E]: " % (x,y)
+            "(C, W, E, O) [E]: " % (x, y)
         )
         if not t_type:
             t_type = "E"
@@ -138,7 +138,7 @@ def add_to_collection(tiles, tile):
 
     if tile["coord"]["x"] == 1 and tile['coord']['y'] == 1:
         tiles[tile["coord"]["y"]][tile["coord"]["x"]] = tile
-        return False  #it's the first tile
+        return False  # it's the first tile
 
     # Looking at upper tile for cohesion
     if tile["coord"]["y"] != 1:
@@ -169,10 +169,8 @@ def main(args):
     for y in range(1, 9):
         tiles[y] = {}
         for x in range(1, 9):
-            b = True
-            while b:
-                tile = ask_info_for_tile(x, y)
-                b = add_to_collection(tiles, tile)
+            while add_to_collection(tiles, ask_info_for_tile(x, y)):
+                continue
 
     with open(args.output, "wb") as f:
         f.write(json.dumps(tiles).encode("UTF-8"))
@@ -183,7 +181,8 @@ if __name__ == "__main__":
         description="Will ask you info about the tiles of the plate"
     )
 
-    p.add_argument("--output", type=str, help="Self Explainatory",
+    p.add_argument(
+        "--output", type=str, help="Self Explainatory",
         required=True
     )
     args = p.parse_args()
