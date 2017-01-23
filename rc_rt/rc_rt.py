@@ -10,5 +10,9 @@ class RcRt(object):
         return self.board
 
 
-if __name__ == "__main__":
+def main():
     print(RcRt().get_board())
+
+
+if __name__ == "__main__":
+    main()
