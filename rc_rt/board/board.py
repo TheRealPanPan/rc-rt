@@ -81,3 +81,12 @@ class Board:
             "x": 5,
             "y": 5
         }
+
+    def __str__(self):
+        data = ""
+        for y in sorted(self.working_plates.keys(), key=int):
+            data = "%s\n%4s : " % (data, y)
+            for x in sorted(self.working_plates[y].keys(), key=int):
+                data = "%s %4s" % (data, self.working_plates[y][x]["urdl"])
+            data = "%s\n" % data
+        return data
