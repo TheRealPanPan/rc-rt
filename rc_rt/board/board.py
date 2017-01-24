@@ -2,12 +2,6 @@
 from .plate.plate import Plate
 
 
-def print_ninja(bob):
-    for y in bob:
-        for x in bob[y]:
-            print(y, x)
-
-
 class Board:
     def __init__(self, plates):
         self.working_plates = {}
@@ -16,22 +10,23 @@ class Board:
         NE = plates["NE"]
         NE.rotate(90)
         NE.offset_coord(x_offset=8)
+        self._add_to_working_plates(NE.tiles)
 
         SW = plates["SW"]
         SW.rotate(270)
         SW.offset_coord(y_offset=8)
+        self._add_to_working_plates(SW.tiles)
 
         SE = plates["SE"]
         SE.rotate(180)
         SE.offset_coord(y_offset=8, x_offset=8)
+        self._add_to_working_plates(SE.tiles)
 
-        print_ninja(NE.tiles)
-        print_ninja(SW.tiles)
-        print_ninja(SE.tiles)
-
-        self.working_plates.update(NE.tiles)
-        self.working_plates.update(SW.tiles)
-        self.working_plates.update(SE.tiles)
+    def _add_to_working_plates(self, plates):
+        for row in plates:
+            if row not in self.working_plates:
+                self.working_plates[row] = {}
+            self.working_plates[row].update(plates[row])
 
     @staticmethod
     def generate_board(plates_file):
@@ -48,7 +43,7 @@ class Board:
             "NW": knwon_plates[0],
             "NE": knwon_plates[1],
             "SW": knwon_plates[2],
-            "SE": knwon_plates[2]
+            "SE": knwon_plates[3]
         }
 
         return Board(plates=selected_plates)
