@@ -26,7 +26,7 @@ objective_type = [
     "RED_MOON",
     "BLUE_WHEEL",
     "YELLOW_SATURN",
-    "GREEN_STAR",
+    "GREEN_STAR"
 ]
 
 
@@ -127,12 +127,16 @@ def add_to_collection(tiles, tile):
             return True
 
     if tile["coord"]["x"] == 8:  # Last col should go right
-        if not is_right_authorized(tile):
+        if not is_right_authorized(tile) and (
+            tile["type"] != tile_type["W"] and tile["type"] != tile_type["O"]
+        ):
             print("You should go right on last col ...")
             return True
 
     if tile["coord"]["y"] == 8:  # Last row should go down except on WHIRLPOOL
-        if not is_down_authorized(tile) and tile["type"] != tile_type["W"]:
+        if not is_down_authorized(tile) and (
+            tile["type"] != tile_type["W"] and tile["type"] != tile_type["O"]
+        ):
             print("You should go down on last row ...")
             return True
 
@@ -181,8 +185,7 @@ if __name__ == "__main__":
         description="Will ask you info about the tiles of the plate"
     )
 
-    p.add_argument(
-        "--output", type=str, help="Self Explainatory",
+    p.add_argument("--output", type=str, help="Self Explainatory",
         required=True
     )
     args = p.parse_args()
